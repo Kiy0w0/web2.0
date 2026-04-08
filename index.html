@@ -5,6 +5,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>(❁´◡`❁)</title>
+
+    <meta property="og:title" content="xeydev." />
+    <meta property="og:description" content="fullstack developer based in Bali. surfing the digital wave~" />
+    <meta property="og:url" content="https://xeyholic.vercel.app/" />
+    <meta property="og:image" content="https://dcdn.dstn.to/avatars/586802340607164417" />
+    <meta property="og:type" content="website" />
+    <meta name="theme-color" content="#5bbfee">
+
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="xeydev.">
+    <meta name="twitter:description" content="fullstack developer based in Bali.">
+    <meta name="twitter:image" content="https://dcdn.dstn.to/avatars/586802340607164417">
+
     <link rel="stylesheet" href="style.css">
 </head>
 
@@ -15,7 +28,7 @@
             <a href="#" onclick="switchView('view-archives')">archives</a>
             <a href="#q-a">Q & A</a>
             <a href="#comms">comms</a>
-            <a href="#nexus">nexus</a>
+            <a href="#" onclick="switchView('view-nexus')">WEBRINGS</a>
         </nav>
         <header class="glossy-header">
             <h1 class="neon-logo">Xeydev <span id="kaomoji">&gt;_&lt;</span></h1>
@@ -39,7 +52,6 @@
                         <a href="#about" class="nav-item">👤 About Me</a>
                         <a href="#projects" class="nav-item">💻 Projects</a>
                         <a href="#guestbook" class="nav-item">📖 Guestbook</a>
-                        <a href="#outbound" class="nav-item">🌐 Webrings</a>
                     </div>
                 </div>
 
@@ -49,10 +61,10 @@
                         style="background: linear-gradient(180deg, #1f2937, #111827); border: 2px outset #4b5563; border-radius: 6px; padding: 12px; margin-top: 10px; font-family: 'VT323', monospace; box-shadow: inset 0 2px 5px rgba(255,255,255,0.1), 0 4px 10px rgba(0,0,0,0.5);">
 
                         <div class="marquee-screen"
-                            style="background: #020617; border: 2px inset #334155; padding: 4px 8px; border-radius: 3px; margin-bottom: 12px; box-shadow: 0 0 10px rgba(0, 191, 255, 0.2) inset;">
-                            <marquee scrollamount="4" id="track-marquee"
-                                style="color: #38bdf8; font-size: 16px; text-shadow: 0 0 5px #0284c7; letter-spacing: 1px;">
-                                Awaiting signal...</marquee>
+                            style="background: #020617; border: 2px inset #334155; padding: 4px 8px; border-radius: 3px; margin-bottom: 12px; box-shadow: 0 0 10px rgba(0, 191, 255, 0.2) inset; overflow: hidden; white-space: nowrap;">
+                            <div id="track-marquee"
+                                style="display: inline-block; color: #38bdf8; font-size: 16px; text-shadow: 0 0 5px #0284c7; letter-spacing: 1px; animation: player-scroll 12s linear infinite; padding-left: 100%;">
+                                Awaiting signal...</div>
                         </div>
 
                         <div class="player-dash"
@@ -90,13 +102,13 @@
                                 style="display: none; position: absolute; top: 100%; left: 0; width: 100%; background: #0f172a; border: 2px outset #4b5563; box-sizing: border-box; z-index: 10; color: #94a3b8; max-height:150px; overflow-y:auto;">
                                 <div class="playlist-item active"
                                     style="padding: 6px; border-bottom: 1px solid #1e293b; cursor:pointer;"
-                                    data-src="https://file.garden/Z3nf4eZzZUtRPfhK/music/deco27-mk.mp3"
+                                    data-src="images/misfits.mp3"
                                     data-title="Misfits (Feat. MELOH, Kid Wine) - Skinny Brown">1. Misfits (Feat. MELOH,
                                     Kid Wine) - Skinny Brown</div>
                                 <div class="playlist-item"
                                     style="padding: 6px; border-bottom: 1px solid #1e293b; cursor:pointer;"
                                     data-src="https://file.garden/Z3nf4eZzZUtRPfhK/music/boen.mp3"
-                                    data-title="bo en - my time">2. bo en - my time</div>
+                                    data-title="bo en - my time">2. Aespa - Drama</div>
                             </div>
                         </div>
                     </div>
@@ -123,6 +135,7 @@
                         <div class="update-log">
                             <h3>Latest Updates</h3>
                             <ul>
+                                <li><strong>[09/04/2026]</strong> Added some new 88x31 buttons to the collection.</li>
                                 <li><strong>[08/04/2026]</strong> Archives layout revamped!</li>
                                 <li><strong>[04/04/2026]</strong> Added some new 88x31 buttons to the collection.</li>
                                 <li><strong>[01/01/2026]</strong> Site launched!</li>
@@ -137,20 +150,40 @@
                             <img src="https://dcdn.dstn.to/avatars/586802340607164417" class="avatar-box"
                                 alt="Webmaster Avatar" id="discord-avatar">
                             <div class="about-text">
-                                <p>I am a developer obsessed with the Web 2.0 aesthetics. I miss the times when the web
-                                    felt
-                                    deeply personal, heavily customized, and full of weird little widgets.</p>
+                                <p>Hello Iam xey you can call me holic. Fullstuck developer based in Bali</p>
                                 <div class="discord-info">
                                     <p><strong>Discord Status:</strong> <span id="discord-status">Loading...</span></p>
                                     <p><strong>Activity:</strong> <span id="discord-activity">Loading...</span></p>
                                 </div>
                             </div>
                         </div>
-                        <div class="skill-bar">
-                            <div class="skill-fill"></div>
+                        <div style="margin-top: 14px;">
+                            <div
+                                style="font-family:'VT323',monospace; color:#0288d1; font-size:1.1rem; margin-bottom:8px; letter-spacing:1px;">
+                                SKILLS</div>
+                            <div style="display:flex; flex-wrap:wrap; gap:8px; align-items:center;">
+                                <div class="skill-chip" title="C++"><img
+                                        src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/cplusplus/cplusplus-original.svg"
+                                        alt="C++"><span>C++</span></div>
+                                <div class="skill-chip" title="Go"><img
+                                        src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/go/go-original.svg"
+                                        alt="Go"><span>Go</span></div>
+                                <div class="skill-chip" title="JavaScript"><img
+                                        src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg"
+                                        alt="JS"><span>JS</span></div>
+                                <div class="skill-chip" title="TypeScript"><img
+                                        src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg"
+                                        alt="TS"><span>TS</span></div>
+                                <div class="skill-chip" title="Python"><img
+                                        src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg"
+                                        alt="Python"><span>PY</span></div>
+                                <div class="skill-chip" title="PHP"><img
+                                        src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/php/php-original.svg"
+                                        alt="PHP"><span>PHP</span></div>
+                            </div>
                         </div>
                     </section>
-                </div> <!-- End view-home -->
+                </div>
 
                 <div id="view-archives" class="page-view" style="display:none;">
                     <section class="main-card glass-box">
@@ -174,6 +207,53 @@
                                         style="color:#0288d1; text-decoration:underline;">My blinkie and stamps
                                         collection</a></li>
                             </ul>
+                        </div>
+                    </section>
+                </div>
+
+
+                <div id="view-nexus" class="page-view" style="display:none;">
+                    <section class="main-card glass-box">
+                        <h2 style="display: flex; align-items: center; gap: 10px;">
+                            <img src="images/suisei.png" alt="icon"
+                                style="height: 32px; width: 32px; image-rendering: pixelated;">
+                            WEBRINGS <span
+                                style="font-size:1rem; color:#0288d1; font-family:'Comic Neue',cursive; font-weight:normal;">//
+                                webring portal</span>
+                        </h2>
+                        <p
+                            style="font-size:14px; color:#004d80; border-left: 3px solid #00bfff; padding-left:10px; margin-bottom:20px;">
+                            A collection of webrings networks of sites bound together by shared interests. Click a
+                            ring
+                        </p>
+
+
+
+                        <div class="webring-card" id="xeyring">
+                            <div class="webring-header">
+                                <span class="webring-dot"></span>
+                                <span class="webring-name">xeydev webring</span>
+                                <span class="webring-tag">retro indie sites</span>
+                            </div>
+                            <div class="webring-desc">A curated collection of personal sites from across the indie web
+                                retro lovers, coders, anime fans, and everyone in between.</div>
+                            <div id="webring-preview"
+                                style="font-size:12px; color:#005580; padding:6px 0; border-top:1px dashed #b3e5fc; margin-top:8px;">
+                                Loading ring...
+                            </div>
+                            <div class="webring-controls">
+                                <a id="ring-prev" href="#" class="webring-btn prev-btn" target="_blank">« prev</a>
+                                <a id="ring-random" href="#" class="webring-btn random-btn">★ random</a>
+                                <a id="ring-list" href="misc/random.txt" class="webring-btn list-btn" target="_blank">≡
+                                    sites</a>
+                                <a id="ring-next" href="#" class="webring-btn next-btn" target="_blank">next »</a>
+                            </div>
+                        </div>
+
+
+                        <div
+                            style="margin-top:24px; padding:12px; background:rgba(0,0,0,0.06); border:1px dashed #00bfff; border-radius:6px; font-size:13px; color:#004888;">
+                            💡 <strong>Want to add your ring here?</strong> Reach out and we can exchange links!
                         </div>
                     </section>
                 </div>
@@ -206,18 +286,19 @@
                 <div class="collection-box glass-box">
                     <div class="box-title">BUTTON STASH</div>
                     <div class="badge-grid">
-                        <button class="badge-btn">NETSCAPE</button>
-                        <button class="badge-btn">IE 6.0</button>
-                        <button class="badge-btn">HTML 4</button>
-                        <button class="badge-btn">VALID CSS</button>
-                        <button class="badge-btn">Y2K SAFE</button>
-                        <button class="badge-btn">GEOCITIES</button>
-                        <button class="badge-btn">WEB 2.0</button>
-                        <button class="badge-btn">FLASH</button>
-                        <button class="badge-btn">WIN AMP</button>
-                        <button class="badge-btn">NO JS?</button>
-                        <button class="badge-btn">CUTE</button>
-                        <button class="badge-btn">XEYDEV</button>
+                        <button class="badge-btn"><img src="images/aespa1.gif"></button>
+                        <button class="badge-btn"><img src="images/twice.gif"></button>
+                        <button class="badge-btn"><img src="images/loona.gif"></button>
+                        <button class="badge-btn"><img src="images/stayc1.gif"></button>
+                        <button class="badge-btn"><img src="images/reve.gif"></button>
+                        <button class="badge-btn"><img src="images/up.gif"></button>
+                        <button class="badge-btn"><img src="images/kitty.png"></button>
+                        <button class="badge-btn"><img src="images/kuromi virus.gif"></button>
+                        <button class="badge-btn"><img src="images/miku3.gif"></button>
+                        <button class="badge-btn"><img src="images/girlbutton.gif"></button>
+                        <button class="badge-btn"><img src="images/arch.gif"></button>
+                        <button class="badge-btn"><img src="images/discord.gif"></button>
+                        <button class="badge-btn"><img src="images/html.gif"></button>
                     </div>
                 </div>
             </aside>

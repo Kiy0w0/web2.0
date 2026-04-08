@@ -64,7 +64,7 @@ function fetchDiscordStatus() {
             if (json.success && json.data) {
                 const data = json.data;
 
-                // 1. Update basic status text
+                
                 const statusEl = document.getElementById('discord-status');
                 if (statusEl) {
                     const statusMapping = {
@@ -76,7 +76,7 @@ function fetchDiscordStatus() {
                     statusEl.textContent = statusMapping[data.discord_status] || data.discord_status;
                 }
 
-                // 2. Update current active game or Spotify
+                
                 const activityEl = document.getElementById('discord-activity');
                 if (activityEl) {
                     const nonCustomActivities = data.activities.filter(act => act.type !== 4);
@@ -99,7 +99,7 @@ function fetchDiscordStatus() {
                     }
                 }
 
-                // 3. Update Custom Status in Right Sidebar "MY STATUS"
+                
                 const moodEl = document.getElementById('my-discord-mood');
                 const messageEl = document.getElementById('my-discord-custom-message');
                 const customStatus = data.activities.find(act => act.type === 4);
@@ -155,7 +155,7 @@ function fetchDiscordStatus() {
 fetchDiscordStatus();
 setInterval(fetchDiscordStatus, 15000);
 
-// --- Audio Player Logic ---
+
 const audio = new Audio();
 const playlistItems = document.querySelectorAll('.playlist-item');
 const playBtn = document.getElementById('playBtn');
@@ -192,7 +192,11 @@ if (playlistToggle) {
         currentTrack = index;
         const track = playlistItems[index];
         audio.src = track.getAttribute('data-src');
-        marqueeElement.textContent = track.getAttribute('data-title') || ('Track ' + (index + 1));
+        const title = track.getAttribute('data-title') || ('Track ' + (index + 1));
+        marqueeElement.textContent = title;
+        marqueeElement.style.animation = 'none';
+        marqueeElement.offsetHeight;
+        marqueeElement.style.animation = 'player-scroll 12s linear infinite';
 
         playlistItems.forEach(item => item.classList.remove('active'));
         track.classList.add('active');
@@ -259,7 +263,7 @@ if (playlistToggle) {
     loadTrack(0);
 }
 
-// --- Calendar Logic ---
+
 const calendarGrid = document.getElementById('calendarGrid');
 const currentMonthElement = document.getElementById('currentMonth');
 const prevMonthBtn = document.getElementById('prevMonth');
@@ -344,12 +348,12 @@ function toggleDrawer(contentId, iconId) {
     }
 }
 
-// --- Digital Clock Logic ---
+
 function updateDigitalClock() {
     const clock = document.getElementById('digital-clock');
     if (!clock) return;
 
-    // Force UTC+7 (WIB)
+    
     const now = new Date();
     const utc = now.getTime() + (now.getTimezoneOffset() * 60000);
     const wib = new Date(utc + (3600000 * 7));
@@ -372,7 +376,7 @@ function updateDigitalClock() {
 setInterval(updateDigitalClock, 1000);
 updateDigitalClock();
 
-// --- Kaomoji Animation ---
+
 const kaomojis = ['>_<', '>_-', '-_<', '-_-'];
 let kaomojiIndex = 0;
 const kaomojiEl = document.getElementById('kaomoji');
@@ -380,5 +384,40 @@ if (kaomojiEl) {
     setInterval(() => {
         kaomojiIndex = (kaomojiIndex + 1) % kaomojis.length;
         kaomojiEl.textContent = kaomojis[kaomojiIndex];
-    }, 1000); // changes every 1 second
+    }, 1000);
 }
+
+
+let ringUrls = [];
+let ringIndex = 0;
+
+function updateRingButtons() {
+    if (ringUrls.length === 0) return;
+    const preview = document.getElementById('webring-preview');
+    const prevBtn = document.getElementById('ring-prev');
+    const randomBtn = document.getElementById('ring-random');
+    const nextBtn = document.getElementById('ring-next');
+
+    const prevIdx = (ringIndex - 1 + ringUrls.length) % ringUrls.length;
+    const nextIdx = (ringIndex + 1) % ringUrls.length;
+    const randomIdx = Math.floor(Math.random() * ringUrls.length);
+
+    if (preview) preview.innerHTML = `🌐 <a href="${ringUrls[ringIndex]}" target="_blank" style="color:#005fa3; text-decoration:underline;">${ringUrls[ringIndex]}</a>`;
+    if (prevBtn) { prevBtn.href = ringUrls[prevIdx]; prevBtn.onclick = (e) => { e.preventDefault(); ringIndex = prevIdx; updateRingButtons(); }; }
+    if (randomBtn) { randomBtn.onclick = (e) => { e.preventDefault(); ringIndex = Math.floor(Math.random() * ringUrls.length); window.open(ringUrls[ringIndex], '_blank'); updateRingButtons(); }; }
+    if (nextBtn) { nextBtn.href = ringUrls[nextIdx]; nextBtn.onclick = (e) => { e.preventDefault(); ringIndex = nextIdx; updateRingButtons(); }; }
+}
+
+fetch('misc/random.txt')
+    .then(r => r.text())
+    .then(text => {
+        ringUrls = text.split('\n').map(u => u.trim()).filter(u => u.startsWith('http'));
+        if (ringUrls.length > 0) {
+            ringIndex = Math.floor(Math.random() * ringUrls.length);
+            updateRingButtons();
+        }
+    })
+    .catch(() => {
+        const preview = document.getElementById('webring-preview');
+        if (preview) preview.textContent = 'Ring unavailable.';
+    });
