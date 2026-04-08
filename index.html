@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>(❁´◡`❁)</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="site-container">
+        <nav class="retro-topbar">
+            <a href="#" onclick="switchView('view-home')">HOME</a>
+            <a href="#" onclick="switchView('view-archives')">archives</a>
+            <a href="#q-a">Q & A</a>
+            <a href="#comms">comms</a>
+            <a href="#nexus">nexus</a>
+        </nav>
+        <header class="glossy-header">
+            <h1 class="neon-logo">Xeydev <span id="kaomoji">&gt;_&lt;</span></h1>
+            <div class="marquee-wrap">
+                <div class="smooth-marquee">
+                    <span>✨ [ WELCOME TO XEYSPACE ] - v2.0 ONLINE - DON'T FORGET TO SIGN THE GUESTBOOK ✨</span>
+                </div>
+            </div>
+        </header>
+
+        <div class="layout-grid">
+            <aside class="sidebar-left">
+                <div class="nav-menu glass-box" style="padding-bottom:5px;">
+                    <div class="box-title" id="navDrawerBtn"
+                        style="cursor:pointer; display:flex; justify-content:space-between; align-items:center;"
+                        onclick="toggleDrawer('navDrawerContent', 'navDrawerIcon')">
+                        <span>NAVIGATION</span> <span id="navDrawerIcon" style="font-size:12px;">▼</span>
+                    </div>
+                    <div id="navDrawerContent" class="nav-drawer-drawer" style="padding-top:10px;">
+                        <a href="#home" class="nav-item">🏠 Home</a>
+                        <a href="#about" class="nav-item">👤 About Me</a>
+                        <a href="#projects" class="nav-item">💻 Projects</a>
+                        <a href="#guestbook" class="nav-item">📖 Guestbook</a>
+                        <a href="#outbound" class="nav-item">🌐 Webrings</a>
+                    </div>
+                </div>
+
+                <div class="media-player glass-box" id="custom-player" style="padding: 15px;">
+                    <div class="box-title" style="margin-bottom:10px;">Music Player</div>
+                    <div class="player-chassis"
+                        style="background: linear-gradient(180deg, #1f2937, #111827); border: 2px outset #4b5563; border-radius: 6px; padding: 12px; margin-top: 10px; font-family: 'VT323', monospace; box-shadow: inset 0 2px 5px rgba(255,255,255,0.1), 0 4px 10px rgba(0,0,0,0.5);">
+
+                        <div class="marquee-screen"
+                            style="background: #020617; border: 2px inset #334155; padding: 4px 8px; border-radius: 3px; margin-bottom: 12px; box-shadow: 0 0 10px rgba(0, 191, 255, 0.2) inset;">
+                            <marquee scrollamount="4" id="track-marquee"
+                                style="color: #38bdf8; font-size: 16px; text-shadow: 0 0 5px #0284c7; letter-spacing: 1px;">
+                                Awaiting signal...</marquee>
+                        </div>
+
+                        <div class="player-dash"
+                            style="display: flex; gap: 15px; align-items: center; margin-bottom: 12px;">
+                            <div class="player-controls" style="display: flex; gap: 4px;">
+                                <button class="transport-btn" id="prevBtn"
+                                    style="background: linear-gradient(180deg, #cbd5e1, #94a3b8); border: 2px outset #f1f5f9; border-radius: 3px; padding: 4px 8px; color: #0f172a; font-size: 14px; cursor: pointer; text-shadow: 1px 1px 0px #fff;">⏮</button>
+                                <button class="transport-btn" id="playBtn"
+                                    style="background: linear-gradient(180deg, #bae6fd, #38bdf8); border: 2px outset #e0f2fe; border-radius: 3px; padding: 4px 12px; color: #082f49; font-size: 14px; font-weight:bold; cursor: pointer; text-shadow: 1px 1px 0px #fff;">▶</button>
+                                <button class="transport-btn" id="nextBtn"
+                                    style="background: linear-gradient(180deg, #cbd5e1, #94a3b8); border: 2px outset #f1f5f9; border-radius: 3px; padding: 4px 8px; color: #0f172a; font-size: 14px; cursor: pointer; text-shadow: 1px 1px 0px #fff;">⏭</button>
+                            </div>
+
+                            <div class="progress-section"
+                                style="flex-grow: 1; display: flex; flex-direction: column; gap: 4px;">
+                                <div id="timeDisplay" class="time-lcd"
+                                    style="background: #000; color: #38bdf8; font-size: 14px; text-align: right; padding: 2px 4px; border: 2px inset #334155; border-radius: 2px; width: fit-content; align-self: flex-end; line-height: 1;">
+                                    0:00</div>
+                                <div class="progress-track" id="progressContainer"
+                                    style="height: 10px; background: #020617; border: 2px inset #4b5563; border-radius: 5px; cursor: pointer; overflow: hidden; width:100%;">
+                                    <div class="progress-fill" id="progressBar"
+                                        style="height: 100%; width: 0%; background: linear-gradient(90deg, #0284c7, #38bdf8, #fff); box-shadow: 0 0 8px #38bdf8; transition: width 0.1s linear;">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="playlist-dropdown" style="position: relative;">
+                            <div id="playlistToggle" class="playlist-btn"
+                                style="background: linear-gradient(180deg, #334155, #1e293b); border: 2px outset #4b5563; color: #38bdf8; font-size: 14px; padding: 4px 8px; display: flex; justify-content: space-between; cursor: pointer; border-radius: 3px; text-transform: uppercase;">
+                                <span>[ Open Playlist ]</span>
+                                <span id="playlist-arrow">▼</span>
+                            </div>
+                            <div id="playlistMenu" class="dropdown-menu"
+                                style="display: none; position: absolute; top: 100%; left: 0; width: 100%; background: #0f172a; border: 2px outset #4b5563; box-sizing: border-box; z-index: 10; color: #94a3b8; max-height:150px; overflow-y:auto;">
+                                <div class="playlist-item active"
+                                    style="padding: 6px; border-bottom: 1px solid #1e293b; cursor:pointer;"
+                                    data-src="https://file.garden/Z3nf4eZzZUtRPfhK/music/deco27-mk.mp3"
+                                    data-title="Misfits (Feat. MELOH, Kid Wine) - Skinny Brown">1. Misfits (Feat. MELOH,
+                                    Kid Wine) - Skinny Brown</div>
+                                <div class="playlist-item"
+                                    style="padding: 6px; border-bottom: 1px solid #1e293b; cursor:pointer;"
+                                    data-src="https://file.garden/Z3nf4eZzZUtRPfhK/music/boen.mp3"
+                                    data-title="bo en - my time">2. bo en - my time</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="stats-box glass-box">
+                    <div class="box-title">LOCAL TIME</div>
+                    <div class="hit-counter" id="digital-clock"
+                        style="display:flex; justify-content:center; align-items:center; background:#000; border:2px inset #666; padding:8px 5px; border-radius:4px; box-shadow:0 0 8px rgba(0,0,0,0.5);">
+                        <span>0</span><span>0</span><b
+                            style="color:#00e5ff; margin:0 2px;">:</b><span>0</span><span>0</span><b
+                            style="color:#00e5ff; margin:0 2px;">:</b><span>0</span><span>0</span>
+                    </div>
+                </div>
+            </aside>
+
+            <main class="content-area">
+                <div id="view-home" class="page-view" style="display:block;">
+                    <section class="main-card glass-box">
+                        <h2>Welcome to xeydev.</h2>
+                        <p>Hello world! You've stumbled upon my retro corner of the web. This layout is a homage to the
+                            chaotic but beautiful era of the early 2000s internet. Everything is glossy, glowing, and
+                            distinctly sky blue.</p>
+                        <div class="update-log">
+                            <h3>Latest Updates</h3>
+                            <ul>
+                                <li><strong>[08/04/2026]</strong> Archives layout revamped!</li>
+                                <li><strong>[04/04/2026]</strong> Added some new 88x31 buttons to the collection.</li>
+                                <li><strong>[01/01/2026]</strong> Site launched!</li>
+                            </ul>
+                        </div>
+                        <button class="action-btn" id="hello-btn">ACTIVATE</button>
+                    </section>
+
+                    <section class="main-card glass-box">
+                        <h2>About Me</h2>
+                        <div class="about-flex">
+                            <img src="https://dcdn.dstn.to/avatars/586802340607164417" class="avatar-box"
+                                alt="Webmaster Avatar" id="discord-avatar">
+                            <div class="about-text">
+                                <p>I am a developer obsessed with the Web 2.0 aesthetics. I miss the times when the web
+                                    felt
+                                    deeply personal, heavily customized, and full of weird little widgets.</p>
+                                <div class="discord-info">
+                                    <p><strong>Discord Status:</strong> <span id="discord-status">Loading...</span></p>
+                                    <p><strong>Activity:</strong> <span id="discord-activity">Loading...</span></p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="skill-bar">
+                            <div class="skill-fill"></div>
+                        </div>
+                    </section>
+                </div> <!-- End view-home -->
+
+                <div id="view-archives" class="page-view" style="display:none;">
+                    <section class="main-card glass-box">
+                        <h2
+                            style="color: #0288d1; border-bottom: 2px dashed #03a9f4; padding-bottom: 5px; margin-top:0;">
+                            Archive Directory</h2>
+                        <div
+                            style="background: rgba(255,255,255,0.7); border: 1px solid #fff; padding: 15px; border-radius: 5px; margin-top: 15px; font-size: 15px;">
+                            <p style="margin-top:0;">Welcome to the archives! Re-explore my previous versions and
+                                digital fragments below.</p>
+                            <ul style="list-style-type: square; padding-left: 20px; line-height: 1.8;">
+                                <li><strong>2026:</strong> <a href="#"
+                                        style="color:#0288d1; text-decoration:underline;">Layout v2.0</a>
+                                </li>
+                                <li><strong>2025:</strong> <a href="#"
+                                        style="color:#0288d1; text-decoration:underline;">Layout v1.0</a></li>
+                                <li><strong>Old Posts:</strong> <a href="#"
+                                        style="color:#0288d1; text-decoration:underline;">Blog entries from my older
+                                        site</a></li>
+                                <li><strong>Graphics:</strong> <a href="#"
+                                        style="color:#0288d1; text-decoration:underline;">My blinkie and stamps
+                                        collection</a></li>
+                            </ul>
+                        </div>
+                    </section>
+                </div>
+            </main>
+
+            <aside class="sidebar-right">
+                <div class="status-widget glass-box">
+                    <div class="box-title">MY STATUS</div>
+                    <div class="status-content"
+                        style="background: url('images/status_bg.gif') center/cover no-repeat; background-color: rgba(189, 235, 255, 0.77); background-blend-mode: lighten; border: 1px dashed #939edb; padding: 10px; font-family: 'MS PGothic', monospace, sans-serif; color: #0018a1; min-height: 80px;">
+                        <div style="font-size:13px; margin-bottom:5px;">
+                            <span class="mood" id="my-discord-mood"
+                                style="color: #db0042; text-decoration: underline; display: inline-block; font-weight:normal;">xeydev</span>
+                            <span id="my-discord-time" style="color:#000;"></span>
+                        </div>
+                        <p id="my-discord-custom-message" style="margin-top: 5px; line-height: 1.4;">Loading status from
+                            Discord...</p>
+                    </div>
+                </div>
+
+                <div class="calendar-widget glass-box">
+                    <div class="box-title" style="display:flex; justify-content:space-between; padding:5px 10px;">
+                        <button class="cal-btn" id="prevMonth" style="font-family:'VT323', monospace;">&lt;&lt;</button>
+                        <span id="currentMonth" style="font-size: 1.2rem;">Month</span>
+                        <button class="cal-btn" id="nextMonth" style="font-family:'VT323', monospace;">&gt;&gt;</button>
+                    </div>
+                    <div id="calendarGrid" class="cal-grid"></div>
+                </div>
+
+                <div class="collection-box glass-box">
+                    <div class="box-title">BUTTON STASH</div>
+                    <div class="badge-grid">
+                        <button class="badge-btn">NETSCAPE</button>
+                        <button class="badge-btn">IE 6.0</button>
+                        <button class="badge-btn">HTML 4</button>
+                        <button class="badge-btn">VALID CSS</button>
+                        <button class="badge-btn">Y2K SAFE</button>
+                        <button class="badge-btn">GEOCITIES</button>
+                        <button class="badge-btn">WEB 2.0</button>
+                        <button class="badge-btn">FLASH</button>
+                        <button class="badge-btn">WIN AMP</button>
+                        <button class="badge-btn">NO JS?</button>
+                        <button class="badge-btn">CUTE</button>
+                        <button class="badge-btn">XEYDEV</button>
+                    </div>
+                </div>
+            </aside>
+        </div>
+
+        <footer class="site-footer glass-box">
+            <p>&copy; 2026 xeydev. All rights reserved. Best viewed on an old CRT monitor.</p>
+            <p style="font-size: 10px; margin-top: 5px; opacity: 0.8;">
+                Inspiration & reference: <a href="https://electric-tenshi.nekoweb.org/" target="_blank"
+                    style="color: #38bdf8; text-decoration: underline;">electric-tenshi</a>
+            </p>
+        </footer>
+    </div>
+    <script src="script.js"></script>
+</body>
+
+</html>
