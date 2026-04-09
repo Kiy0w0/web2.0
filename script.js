@@ -64,7 +64,7 @@ function fetchDiscordStatus() {
             if (json.success && json.data) {
                 const data = json.data;
 
-                
+
                 const statusEl = document.getElementById('discord-status');
                 if (statusEl) {
                     const statusMapping = {
@@ -74,68 +74,89 @@ function fetchDiscordStatus() {
                         offline: '⚫ Offline'
                     };
                     statusEl.textContent = statusMapping[data.discord_status] || data.discord_status;
+
+                    const avatarEl = document.getElementById('discord-avatar');
+                    if (avatarEl) {
+                        const borderColors = { online: '#3ba55c', idle: '#faa61a', dnd: '#ed4245', offline: '#747f8d' };
+                        avatarEl.style.borderColor = borderColors[data.discord_status] || '#747f8d';
+                        avatarEl.style.boxShadow = `0 0 10px ${borderColors[data.discord_status] || '#747f8d'}88`;
+                    }
+
+                    const decoEl = document.getElementById('avatar-decoration');
+                    if (decoEl && data.discord_user && data.discord_user.avatar_decoration_data) {
+                        const asset = data.discord_user.avatar_decoration_data.asset;
+                        decoEl.src = `https://cdn.discordapp.com/avatar-decoration-presets/${asset}.png?size=240&passthrough=true`;
+                        decoEl.style.display = 'block';
+                    }
                 }
 
-                
+
                 const activityEl = document.getElementById('discord-activity');
-                if (activityEl) {
+                const msnActivityEl = document.getElementById('msn-activity');
+                if (activityEl || msnActivityEl) {
                     const nonCustomActivities = data.activities.filter(act => act.type !== 4);
+                    let activityText = 'none';
                     if (data.listening_to_spotify && data.spotify) {
-                        activityEl.innerHTML = `<img src="${data.spotify.album_art_url}" style="width:24px; height:24px; vertical-align:middle; border-radius:3px; margin-right:5px; box-shadow:0 0 3px rgba(0,0,0,0.5);"><span style="vertical-align:middle;">Listening to <strong>${data.spotify.song}</strong></span>`;
+                        const spotifyHtml = `<img src="${data.spotify.album_art_url}" style="width:24px; height:24px; vertical-align:middle; border-radius:3px; margin-right:5px;"><span style="vertical-align:middle;">Listening to <strong>${data.spotify.song}</strong></span>`;
+                        if (activityEl) activityEl.innerHTML = spotifyHtml;
+                        activityText = `🎵 ${data.spotify.song} – ${data.spotify.artist}`;
                     } else if (nonCustomActivities.length > 0) {
                         const activity = nonCustomActivities[0];
                         let appIconStr = '';
                         if (activity.application_id) {
-                            appIconStr = `<img src="https://dcdn.dstn.to/app-icons/${activity.application_id}" style="width:24px; height:24px; vertical-align:middle; border-radius:4px; margin-right:5px; box-shadow:0 0 3px rgba(0,0,0,0.5);" onerror="this.style.display='none'">`;
-                        } else if (activity.assets && activity.assets.large_image) {
-                            let imgUrl = activity.assets.large_image.startsWith('mp:external/')
-                                ? `https://media.discordapp.net/external/${activity.assets.large_image.split('mp:external/')[1]}`
-                                : `https://cdn.discordapp.com/app-assets/${activity.application_id}/${activity.assets.large_image}.png`;
-                            appIconStr = `<img src="${imgUrl}" style="width:24px; height:24px; vertical-align:middle; border-radius:4px; margin-right:5px; box-shadow:0 0 3px rgba(0,0,0,0.5);" onerror="this.style.display='none'">`;
+                            appIconStr = `<img src="https://dcdn.dstn.to/app-icons/${activity.application_id}" style="width:24px; height:24px; vertical-align:middle; border-radius:4px; margin-right:5px;" onerror="this.style.display='none'">`;
                         }
-                        activityEl.innerHTML = `${appIconStr}<span style="vertical-align:middle;">${activity.type === 0 ? 'Playing' : 'Activity'}: ${activity.name}</span>`;
+                        if (activityEl) activityEl.innerHTML = `${appIconStr}<span style="vertical-align:middle;">${activity.type === 0 ? 'Playing' : 'Activity'}: ${activity.name}</span>`;
+                        activityText = `${activity.type === 0 ? '🎮 Playing' : '⚡'} ${activity.name}`;
                     } else {
-                        activityEl.innerHTML = '<span style="vertical-align:middle;">None</span>';
+                        if (activityEl) activityEl.innerHTML = '<span>None</span>';
+                        activityText = 'idle...';
                     }
+                    if (msnActivityEl) msnActivityEl.textContent = activityText;
                 }
 
-                
+
                 const moodEl = document.getElementById('my-discord-mood');
                 const messageEl = document.getElementById('my-discord-custom-message');
+                const msnMsgEl = document.getElementById('msn-custom-msg');
+                const msnDot = document.getElementById('msn-dot');
+                const msnStatusLabel = document.getElementById('msn-status-label');
                 const customStatus = data.activities.find(act => act.type === 4);
                 const timeEl = document.getElementById('my-discord-time');
+
+                const dotColors = { online: '#3ba55c', idle: '#faa61a', dnd: '#ed4245', offline: '#747f8d' };
+                const statusLabels = { online: '🟢 Online', idle: '🌙 Away', dnd: '🔴 Busy', offline: '⚫ Offline' };
+                if (msnDot) msnDot.style.background = dotColors[data.discord_status] || '#747f8d';
+                if (msnStatusLabel) msnStatusLabel.textContent = statusLabels[data.discord_status] || data.discord_status;
+                if (msnStatusLabel) msnStatusLabel.style.color = dotColors[data.discord_status] || '#747f8d';
 
                 function formatTimeAgo(ts) {
                     if (!ts) return '';
                     const seconds = Math.floor((Date.now() - ts) / 1000);
-                    if (seconds <= 0) return ' just now';
-                    if (seconds < 60) return ` ${seconds} seconds ago`;
+                    if (seconds <= 0) return 'just now';
+                    if (seconds < 60) return `${seconds}s ago`;
                     const mins = Math.floor(seconds / 60);
-                    if (mins < 60) return ` ${mins} min${mins > 1 ? 's' : ''} ago`;
+                    if (mins < 60) return `${mins}m ago`;
                     const hours = Math.floor(mins / 60);
-                    if (hours < 24) return ` ${hours} hour${hours > 1 ? 's' : ''} ago`;
+                    if (hours < 24) return `${hours}h ago`;
                     const days = Math.floor(hours / 24);
-                    return ` ${days} day${days > 1 ? 's' : ''} ago`;
+                    return `${days}d ago`;
                 }
 
                 if (customStatus) {
                     localStorage.removeItem('xey_status_cleared');
                     if (timeEl) timeEl.textContent = formatTimeAgo(customStatus.created_at);
 
-                    if (moodEl) {
-                        let emojiHtml = '💭';
-                        if (customStatus.emoji) {
-                            if (customStatus.emoji.id) {
-                                emojiHtml = `<img src="https://cdn.discordapp.com/emojis/${customStatus.emoji.id}.${customStatus.emoji.animated ? 'gif' : 'webp'}?size=32" style="width:16px;vertical-align:middle">`;
-                            } else {
-                                emojiHtml = customStatus.emoji.name;
-                            }
-                        }
-                        moodEl.innerHTML = `xeydev ${emojiHtml}`;
+                    let emojiHtml = '💭';
+                    if (customStatus.emoji) {
+                        emojiHtml = customStatus.emoji.id
+                            ? `<img src="https://cdn.discordapp.com/emojis/${customStatus.emoji.id}.${customStatus.emoji.animated ? 'gif' : 'webp'}?size=32" style="width:16px;vertical-align:middle">`
+                            : customStatus.emoji.name;
                     }
-                    if (messageEl) {
-                        messageEl.textContent = customStatus.state || 'Just chilling...';
-                    }
+                    if (moodEl) moodEl.innerHTML = `xeydev ${emojiHtml}`;
+                    const statusText = customStatus.state || 'Just chilling...';
+                    if (messageEl) messageEl.textContent = statusText;
+                    if (msnMsgEl) msnMsgEl.textContent = statusText;
                 } else {
                     let clearedTime = localStorage.getItem('xey_status_cleared');
                     if (!clearedTime) {
@@ -143,9 +164,9 @@ function fetchDiscordStatus() {
                         localStorage.setItem('xey_status_cleared', clearedTime);
                     }
                     if (timeEl) timeEl.textContent = formatTimeAgo(parseInt(clearedTime, 10));
-
-                    if (moodEl) moodEl.innerHTML = `xeydev`;
-                    if (messageEl) messageEl.textContent = `If you see this, I'm probably offline.`;
+                    if (moodEl) moodEl.innerHTML = 'xeydev';
+                    if (messageEl) messageEl.textContent = 'Life is not bibbidi bobbidi boowa.';
+                    if (msnMsgEl) msnMsgEl.textContent = 'Life is not bibbidi bobbidi boowa😒';
                 }
             }
         })
@@ -353,7 +374,6 @@ function updateDigitalClock() {
     const clock = document.getElementById('digital-clock');
     if (!clock) return;
 
-    
     const now = new Date();
     const utc = now.getTime() + (now.getTimezoneOffset() * 60000);
     const wib = new Date(utc + (3600000 * 7));
@@ -361,18 +381,65 @@ function updateDigitalClock() {
     const h = wib.getHours().toString().padStart(2, '0');
     const m = wib.getMinutes().toString().padStart(2, '0');
     const s = wib.getSeconds().toString().padStart(2, '0');
+    const days = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
+    const day = days[wib.getDay()];
 
-    clock.innerHTML = `
-        <span style="font-size: 26px; padding: 2px 7px; height:32px; display:inline-flex; align-items:center; justify-content:center;">${h[0]}</span>
-        <span style="font-size: 26px; padding: 2px 7px; height:32px; display:inline-flex; align-items:center; justify-content:center;">${h[1]}</span>
-        <b style="color:#00e5ff; margin:0 3px; font-size:20px; text-shadow:0 0 5px #00e5ff; display:inline-flex; align-items:center; justify-content:center; height:32px;">:</b>
-        <span style="font-size: 26px; padding: 2px 7px; height:32px; display:inline-flex; align-items:center; justify-content:center;">${m[0]}</span>
-        <span style="font-size: 26px; padding: 2px 7px; height:32px; display:inline-flex; align-items:center; justify-content:center;">${m[1]}</span>
-        <b style="color:#00e5ff; margin:0 3px; font-size:20px; text-shadow:0 0 5px #00e5ff; display:inline-flex; align-items:center; justify-content:center; height:32px;">:</b>
-        <span style="font-size: 26px; padding: 2px 7px; height:32px; display:inline-flex; align-items:center; justify-content:center;">${s[0]}</span>
-        <span style="font-size: 26px; padding: 2px 7px; height:32px; display:inline-flex; align-items:center; justify-content:center;">${s[1]}</span>
-    `;
+    const d = (n) => `<span class="clk-d">${n}</span>`;
+    const sep = `<span class="clk-sep">:</span>`;
+
+    clock.innerHTML =
+        `<div class="clk-row">${d(h[0])}${d(h[1])}${sep}${d(m[0])}${d(m[1])}${sep}${d(s[0])}${d(s[1])}</div>
+         <div class="clk-sub">${day} &bull; WIB</div>`;
 }
+
+if (!document.getElementById('clk-style')) {
+    const st = document.createElement('style');
+    st.id = 'clk-style';
+    st.textContent = `
+        #digital-clock { text-align:center; }
+        .clk-row {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 3px;
+        }
+        .clk-d {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 26px;
+            height: 34px;
+            background: #001a1a;
+            color: #00ffea;
+            font-family: 'VT323', monospace;
+            font-size: 24px;
+            border-radius: 4px;
+            border: 1px solid #003344;
+            box-shadow: 0 0 6px #00e5ff44 inset;
+            text-shadow: 0 0 8px #00ffea, 0 0 16px #00b8d4;
+        }
+        .clk-sep {
+            color: #00ffea;
+            font-family: 'VT323', monospace;
+            font-size: 22px;
+            text-shadow: 0 0 8px #00ffea;
+            animation: blink-sep 1s step-end infinite;
+            line-height: 1;
+            margin: 0 1px;
+        }
+        .clk-sub {
+            font-family: 'VT323', monospace;
+            font-size: 12px;
+            letter-spacing: 2px;
+            color: #00b8d4;
+            text-shadow: 0 0 5px #00e5ff;
+            opacity: 0.75;
+            margin-top: 4px;
+        }
+    `;
+    document.head.appendChild(st);
+}
+
 setInterval(updateDigitalClock, 1000);
 updateDigitalClock();
 
@@ -421,3 +488,82 @@ fetch('misc/random.txt')
         const preview = document.getElementById('webring-preview');
         if (preview) preview.textContent = 'Ring unavailable.';
     });
+
+const GB_KEY = 'xeydev_guestbook';
+
+function gbLoad() {
+    try { return JSON.parse(localStorage.getItem(GB_KEY)) || []; }
+    catch { return []; }
+}
+
+function gbSave(entries) {
+    localStorage.setItem(GB_KEY, JSON.stringify(entries));
+}
+
+function gbTimeAgo(ts) {
+    const s = Math.floor((Date.now() - ts) / 1000);
+    if (s < 60) return 'just now';
+    if (s < 3600) return Math.floor(s / 60) + ' min ago';
+    if (s < 86400) return Math.floor(s / 3600) + ' hr ago';
+    if (s < 604800) return Math.floor(s / 86400) + ' day(s) ago';
+    return new Date(ts).toLocaleDateString();
+}
+
+function gbRender() {
+    const container = document.getElementById('gb-entries');
+    if (!container) return;
+    const entries = gbLoad();
+
+    if (entries.length === 0) {
+        container.innerHTML = `<div style="text-align:center; padding:24px; color:#6698c4; font-style:italic; font-size:14px;">
+            no entries yet... be the first to sign! ✨</div>`;
+        return;
+    }
+
+    container.innerHTML = entries.slice().reverse().map((e, i) => {
+        const realIdx = entries.length - 1 - i;
+        const moodColors = ['#c8e6ff', '#d4f5e0', '#ffe0ec', '#fff4cc', '#ead4ff'];
+        const bg = moodColors[realIdx % moodColors.length];
+        return `<div class="gb-entry" style="--entry-bg:${bg};">
+            <div class="gb-entry-top">
+                <span class="gb-icon">💌</span>
+                <div>
+                    <div class="gb-name">${e.url
+                ? `<a href="${e.url}" target="_blank" rel="noopener" style="color:#0056a8;text-decoration:none;">${e.name} 🔗</a>`
+                : e.name}</div>
+                    <div class="gb-time">${gbTimeAgo(e.ts)}</div>
+                </div>
+                <button class="gb-del" onclick="gbDelete(${realIdx})" title="delete">✕</button>
+            </div>
+            <div class="gb-msg">${e.msg.replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/\n/g, '<br>')}</div>
+        </div>`;
+    }).join('');
+}
+
+function gbDelete(idx) {
+    if (!confirm('delete this entry?')) return;
+    const entries = gbLoad();
+    entries.splice(idx, 1);
+    gbSave(entries);
+    gbRender();
+}
+
+const gbForm = document.getElementById('gb-form');
+if (gbForm) {
+    gbForm.addEventListener('submit', e => {
+        e.preventDefault();
+        const name = document.getElementById('gb-name').value.trim();
+        const url = document.getElementById('gb-url').value.trim();
+        const msg = document.getElementById('gb-msg').value.trim();
+        if (!name) { alert('please enter your name!'); return; }
+        if (!msg) { alert('please write a message!'); return; }
+        const entries = gbLoad();
+        entries.push({ name, url, msg, ts: Date.now() });
+        gbSave(entries);
+        gbForm.reset();
+        gbRender();
+        playBeep();
+    });
+}
+
+gbRender();
